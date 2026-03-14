@@ -44,7 +44,11 @@ async def main():
                         image_url = subproperty['dhd']
                         print(f"🔍 Found image URL!")
                         parsed_url = urlparse(image_url)
-                        ext = os.path.splitext(parsed_url.path)[-1] or '.jpg'
+                        ext = (os.path.splitext(parsed_url.path)[-1] or '.jpg').lower()
+                        allowed_exts = {'.jpg', '.png', '.jpeg', '.webp'}
+                        if ext not in allowed_exts:
+                            print(f"Skipping potentially unsafe file extension: {ext}")
+                            continue
                         filename = f"{file_index}{ext}"
                         file_path = os.path.join(download_dir, filename)
 

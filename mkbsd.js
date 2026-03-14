@@ -31,7 +31,12 @@ async function main() {
 				const imageUrl = subproperty.dhd;
 				console.info(`🔍 Found image URL!`);
 				await delay(100);
-				const ext = path.extname(new URL(imageUrl).pathname) || '.jpg';
+				const allowedExts = ['.jpg', '.jpeg', '.png', '.webp'];
+				const ext = (path.extname(new URL(imageUrl).pathname) || '.jpg').toLowerCase();
+				if (!allowedExts.includes(ext)) {
+					console.info(`Skipping potentially unsafe file extension: ${ext}`);
+					continue;
+				}
 				const filename = `${fileIndex}${ext}`;
 				const filePath = path.join(downloadDir, filename);
 				await downloadImage(imageUrl, filePath);
